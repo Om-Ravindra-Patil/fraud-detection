@@ -1,0 +1,22 @@
+# Data and generated artefacts stay out of git
+data/
+mlruns/
+mlartifacts/
+models/*.pkl
+models/*.txt
+reports/eda/*.csv
+
+# Secrets
+.env
+.kaggle/
+kaggle.json
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+.ipynb_checkpoints/
+.DS_Store

@@ -1,0 +1,11 @@
+paths:
+  raw_dir: data/raw
+  duckdb: data/processed/fraud.duckdb
+  features_parquet: data/processed/features.parquet
+  eda_dir: reports/eda
+  figures_dir: reports/figures
+
+data:
+  # TransactionDT is seconds from an undisclosed reference point. 2017-11-30 is the
+  # widely used community assumption. It only affects calendar labels, not the model.
+  reference_date: "2017-11-30"
