@@ -1,33 +1,21 @@
--- One clean row per labelled transaction, with identity data joined on.
--- Only about a quarter of transactions have an identity record, so this is a LEFT JOIN.
+-- Clean, consistently named transactions table.
 --
--- card_key approximates "the same card" by combining the anonymised card fields and
--- billing region. IEEE-CIS has no true customer or card ID, so this is a proxy.
+-- Leakage decision: the post-transaction balance columns (newbalanceOrig, newbalanceDest)
+-- are dropped here. They describe the account AFTER the payment, and in PaySim they
+-- contain simulator artifacts that almost perfectly reveal fraud. A real bank scoring a
+-- payment before approving it would only know the balances before the payment.
+-- isFlaggedFraud is kept for comparison only: it is the simulator's existing rule-based flag.
 
 CREATE OR REPLACE TABLE transactions AS
 SELECT
-    t.TransactionID                                         AS transaction_id,
-    CAST(t.isFraud AS INTEGER)                              AS is_fraud,
-    CAST(t.TransactionDT AS BIGINT)                         AS dt_seconds,
-    TIMESTAMP '{{ reference_date }}' + to_seconds(CAST(t.TransactionDT AS BIGINT)) AS event_ts,
-    CAST(t.TransactionAmt AS DOUBLE)                        AS amount,
-    t.ProductCD                                             AS product_cd,
-    t.card4                                                 AS card_network,
-    t.card6                                                 AS card_type,
-    t.P_emaildomain                                         AS p_email_domain,
-    t.R_emaildomain                                         AS r_email_domain,
-    CAST(t.dist1 AS DOUBLE)                                 AS dist1,
-    concat_ws('_',
-        coalesce(CAST(t.card1 AS VARCHAR), 'na'),
-        coalesce(CAST(t.card2 AS VARCHAR), 'na'),
-        coalesce(CAST(t.card3 AS VARCHAR), 'na'),
-        coalesce(CAST(t.card5 AS VARCHAR), 'na'),
-        coalesce(CAST(t.card4 AS VARCHAR), 'na'),
-        coalesce(CAST(t.card6 AS VARCHAR), 'na'),
-        coalesce(CAST(t.addr1 AS VARCHAR), 'na')
-    )                                                       AS card_key,
-    (i.TransactionID IS NOT NULL)::INTEGER                  AS has_identity,
-    i.DeviceType                                            AS device_type
-FROM raw_transaction AS t
-LEFT JOIN raw_identity AS i
-    ON t.TransactionID = i.TransactionID;
+    transaction_id,
+    CAST(step AS INTEGER)               AS step,          -- 1 step = 1 hour, 744 steps = 30 days
+    type,
+    CAST(amount AS DOUBLE)              AS amount,
+    nameOrig                            AS name_orig,
+    nameDest                            AS name_dest,
+    CAST(oldbalanceOrg AS DOUBLE)       AS old_balance_orig,
+    CAST(oldbalanceDest AS DOUBLE)      AS old_balance_dest,
+    CAST(isFraud AS INTEGER)            AS is_fraud,
+    CAST(isFlaggedFraud AS INTEGER)     AS is_flagged_fraud
+FROM raw_paysim;

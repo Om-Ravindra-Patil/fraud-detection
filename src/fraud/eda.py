@@ -28,11 +28,20 @@ def _style(ax, title: str, xlabel: str, ylabel: str) -> None:
     ax.tick_params(colors=INK_MUTED)
 
 
-def plot_weekly_rate(df, path) -> None:
+def plot_daily_rate(df, path) -> None:
     fig, ax = plt.subplots(figsize=(9, 3.6))
-    ax.plot(df["week"], df["fraud_rate_pct"], color=SERIES, linewidth=2, marker="o", markersize=4)
-    _style(ax, "Weekly fraud rate", "Week", "Fraud rate (%)")
+    ax.plot(df["day"], df["fraud_rate_pct"], color=SERIES, linewidth=2, marker="o", markersize=4)
+    _style(ax, "Daily fraud rate, TRANSFER and CASH_OUT", "Day", "Fraud rate (%)")
     ax.set_ylim(bottom=0)
+    fig.tight_layout()
+    fig.savefig(path, dpi=150)
+    plt.close(fig)
+
+
+def plot_daily_volume(df, path) -> None:
+    fig, ax = plt.subplots(figsize=(9, 3.6))
+    ax.bar(df["day"], df["transactions"], color=SERIES, width=0.75)
+    _style(ax, "Daily transaction volume, TRANSFER and CASH_OUT", "Day", "Transactions")
     fig.tight_layout()
     fig.savefig(path, dpi=150)
     plt.close(fig)
@@ -41,7 +50,7 @@ def plot_weekly_rate(df, path) -> None:
 def plot_hourly_rate(df, path) -> None:
     fig, ax = plt.subplots(figsize=(9, 3.6))
     ax.bar(df["hour_of_day"], df["fraud_rate_pct"], color=SERIES, width=0.75)
-    _style(ax, "Fraud rate by hour of day (relative clock)", "Hour", "Fraud rate (%)")
+    _style(ax, "Fraud rate by hour of day", "Hour", "Fraud rate (%)")
     ax.set_xticks(range(0, 24, 2))
     fig.tight_layout()
     fig.savefig(path, dpi=150)
@@ -62,7 +71,8 @@ def main() -> None:
         results[name] = df
         print(f"\n== {name} ==\n{df.to_string(index=False)}")
 
-    plot_weekly_rate(results["fraud_by_week"], paths["figures_dir"] / "eda_weekly_fraud_rate.png")
+    plot_daily_rate(results["fraud_by_day"], paths["figures_dir"] / "eda_daily_fraud_rate.png")
+    plot_daily_volume(results["fraud_by_day"], paths["figures_dir"] / "eda_daily_volume.png")
     plot_hourly_rate(results["fraud_by_hour"], paths["figures_dir"] / "eda_hourly_fraud_rate.png")
     print(f"\nSaved CSVs to {paths['eda_dir']} and charts to {paths['figures_dir']}")
 

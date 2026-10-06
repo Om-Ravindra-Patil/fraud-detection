@@ -1,18 +1,18 @@
 #!/usr/bin/env bash
-# Downloads the IEEE-CIS training files. Before running:
-#   1. Accept the competition rules at https://www.kaggle.com/competitions/ieee-fraud-detection/rules
-#   2. Put your Kaggle API token at ~/.kaggle/kaggle.json (chmod 600)
+# Downloads the PaySim dataset (Kaggle: ealaxi/paysim1, licence CC BY-SA 4.0).
+# Before running, log in once with: .venv/bin/kaggle auth login
 set -euo pipefail
 RAW_DIR="data/raw"
+TARGET="$RAW_DIR/paysim.csv"
 mkdir -p "$RAW_DIR"
-for f in train_transaction.csv train_identity.csv; do
-  if [[ -f "$RAW_DIR/$f" ]]; then
-    echo "$f already present, skipping"
-    continue
-  fi
-  .venv/bin/kaggle competitions download -c ieee-fraud-detection -f "$f" -p "$RAW_DIR"
-  if [[ -f "$RAW_DIR/$f.zip" ]]; then
-    unzip -o -q "$RAW_DIR/$f.zip" -d "$RAW_DIR" && rm "$RAW_DIR/$f.zip"
-  fi
-done
+if [[ -f "$TARGET" ]]; then
+  echo "paysim.csv already present, skipping"
+else
+  .venv/bin/kaggle datasets download -d ealaxi/paysim1 -p "$RAW_DIR" --unzip
+  mv "$RAW_DIR"/PS_*_log.csv "$TARGET"
+fi
+if [[ ! -f "$TARGET" ]]; then
+  echo "Download failed. Run '.venv/bin/kaggle auth login' and try again." >&2
+  exit 1
+fi
 ls -lh "$RAW_DIR"
