@@ -7,3 +7,49 @@ paths:
 
 data:
   raw_file: paysim.csv
+
+# Time-based split on PaySim day (step // 24). Day 30 is excluded: it has 282 rows, all fraud,
+# which is a simulator artifact. Validation picks the threshold; test is used once at the end.
+split:
+  train_days: [0, 19]
+  valid_days: [20, 24]
+  test_days: [25, 29]
+
+features:
+  categorical: [type]
+  # Main feature set. Leaves out the sender's exact balance, because in PaySim 97.6% of frauds
+  # send exactly the full balance and no genuine transaction does: a simulator rule, not behaviour.
+  realistic:
+    - log_amount
+    - hour_of_day
+    - empties_orig_account
+    - orig_balance_zero
+    - dest_balance_zero
+    - old_balance_dest
+    - dest_txn_count_24h
+    - dest_amount_sum_24h
+    - dest_prior_txn_count
+    - hours_since_prev_dest_txn
+  # Added on top of the realistic set to measure how much the simulator artifact inflates scores.
+  full_extra:
+    - old_balance_orig
+    - amount_to_orig_balance
+
+model:
+  seed: 42
+  lightgbm:
+    n_estimators: 2000
+    learning_rate: 0.05
+    num_leaves: 31
+    min_child_samples: 100
+    subsample: 0.8
+    subsample_freq: 1
+    colsample_bytree: 0.8
+    early_stopping_rounds: 100
+  logistic_regression:
+    C: 1.0
+    max_iter: 2000
+
+mlflow:
+  tracking_uri: sqlite:///mlflow.db
+  experiment: paysim-fraud

@@ -4,6 +4,7 @@ mlruns/
 mlartifacts/
 models/*.pkl
 models/*.txt
+models/*.joblib
 reports/eda/*.csv
 
 # Secrets
@@ -20,3 +21,4 @@ __pycache__/
 *.egg-info/
 .ipynb_checkpoints/
 .DS_Store
+mlflow.db

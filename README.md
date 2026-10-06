@@ -4,7 +4,7 @@ End-to-end fraud detection project: SQL feature engineering in DuckDB, a time-ba
 model evaluation, a decision threshold chosen by business cost, SHAP explanations,
 LLM-written analyst notes, MLOps tooling and a Streamlit dashboard.
 
-Full write-up to follow. Current status: **Phase 2 (data and SQL features).**
+Full write-up to follow. Current status: **Phase 3 (modelling).**
 
 ## Data
 
@@ -28,6 +28,8 @@ make setup      # create .venv and install dependencies
 make data       # download PaySim from Kaggle (log in once first, see below)
 make features   # build data/processed/fraud.duckdb and features.parquet
 make eda        # run the SQL EDA queries, save results and charts
+make train      # train and compare models on the time-based split, logged to MLflow
+make mlflow     # open the MLflow UI at http://127.0.0.1:5001
 make test       # run the test suite (uses small synthetic data, no download needed)
 ```
 
