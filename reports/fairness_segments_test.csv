@@ -1,0 +1,11 @@
+segment_by,segment,payments,frauds,alert_rate_pct,false_positive_rate_pct,recall_pct
+amount quintile,Q1,8658,215.0,3.78,2.12,68.8
+amount quintile,Q2,8657,136.0,2.99,1.97,66.9
+amount quintile,Q3,8657,86.0,3.04,2.38,68.6
+amount quintile,Q4,8657,162.0,3.87,2.63,69.1
+amount quintile,Q5,8657,737.0,10.87,3.96,85.1
+payment type,CASH_OUT,33293,668.0,2.75,1.52,63.2
+payment type,TRANSFER,9993,668.0,12.09,6.36,92.1
+time of day,1 night (00-06),851,394.0,55.58,19.04,98.0
+time of day,2 day (07-20),39370,756.0,3.59,2.35,66.5
+time of day,3 evening (21-23),3065,186.0,7.83,3.2,79.6

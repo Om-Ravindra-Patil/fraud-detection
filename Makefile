@@ -1,4 +1,4 @@
-.PHONY: setup data features eda train evaluate mlflow test lint
+.PHONY: setup data features eda train evaluate explain fairness notes mlflow test lint
 
 setup:
 	python3 -m venv .venv && .venv/bin/pip install -U pip && .venv/bin/pip install -e ".[dev]"
@@ -17,6 +17,15 @@ train:
 
 evaluate:
 	.venv/bin/python -m fraud.evaluate
+
+explain:
+	.venv/bin/python -m fraud.explain
+
+fairness:
+	.venv/bin/python -m fraud.fairness
+
+notes:
+	.venv/bin/python -m fraud.notes
 
 mlflow:
 	MLFLOW_DISABLE_AGENT_HINT=1 .venv/bin/mlflow ui --backend-store-uri sqlite:///mlflow.db --host 127.0.0.1 --port 5001

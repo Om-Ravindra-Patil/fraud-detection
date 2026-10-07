@@ -1,0 +1,12 @@
+,mean_abs_shap
+empties_orig_account,0.8828
+type,0.3214
+log_amount,0.2871
+dest_balance_zero,0.1693
+hour_of_day,0.1663
+hours_since_prev_dest_txn,0.1628
+old_balance_dest,0.0993
+dest_prior_txn_count,0.0566
+orig_balance_zero,0.0381
+dest_txn_count_24h,0.0141
+dest_amount_sum_24h,0.005

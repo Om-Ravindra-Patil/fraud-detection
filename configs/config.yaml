@@ -66,3 +66,12 @@ costs:
   daily_alert_capacity: 500
   main_model: lightgbm_realistic_none
   baseline_model: logreg_realistic_balanced
+
+# LLM analyst notes (Phase 5). Notes are generated once and saved; the dashboard only reads them.
+notes:
+  provider: ollama              # runs locally: free, and no data leaves the machine
+  model: llama3.2:3b
+  ollama_url: http://127.0.0.1:11434
+  max_notes: 200                # spread evenly along the alert queue, highest risk to threshold
+  temperature: 0.2
+  timeout_seconds: 60
