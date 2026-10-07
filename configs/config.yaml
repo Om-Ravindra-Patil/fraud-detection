@@ -53,3 +53,16 @@ model:
 mlflow:
   tracking_uri: sqlite:///mlflow.db
   experiment: paysim-fraud
+
+# Business costs used to choose the alert threshold (Phase 4). PaySim amounts are in an
+# unnamed currency, so costs are set relative to them.
+costs:
+  # A missed fraud loses its full amount (no recovery assumed).
+  missed_fraud_loss_rate: 1.0
+  # Analyst time plus friction for the customer, per alert. About 0.6% of the median genuine
+  # payment (about 165,000), similar to a 15-minute review on a typical UK card payment.
+  review_cost_per_alert: 1000
+  # How many alerts the fraud team can review per day (for example 10 analysts x 50 each).
+  daily_alert_capacity: 500
+  main_model: lightgbm_realistic_none
+  baseline_model: logreg_realistic_balanced

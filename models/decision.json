@@ -1,0 +1,7 @@
+{
+  "model": "lightgbm_realistic_none",
+  "threshold": 0.018385546491860427,
+  "review_cost_per_alert": 1000,
+  "daily_alert_capacity": 500,
+  "missed_fraud_loss_rate": 1.0
+}
