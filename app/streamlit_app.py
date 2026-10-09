@@ -285,7 +285,7 @@ with monitor_tab:
     st.altair_chart(
         alt.Chart(daily).mark_line(point=True, color=LOWERS).encode(
             x=alt.X("day:Q", title="Day", scale=alt.Scale(zero=False)),
-            y=alt.Y("alert_rate:Q", title="Share of payments alerted", axis=alt.Axis(format="%")),
+            y=alt.Y("alert_rate:Q", title="Alert rate", axis=alt.Axis(format="%")),
             tooltip=["day", "payments", alt.Tooltip("alert_rate:Q", format=".1%")],
         ),
         width="stretch", height=200,
