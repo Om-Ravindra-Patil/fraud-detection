@@ -1,7 +1,7 @@
 .PHONY: setup data features eda train evaluate explain fairness notes app-data app mlflow test lint
 
 setup:
-	python3 -m venv .venv && .venv/bin/pip install -U pip && .venv/bin/pip install -e ".[dev]"
+	python3 -m venv .venv && .venv/bin/pip install -U pip && .venv/bin/pip install -e ".[dev,app]"
 
 data:
 	bash scripts/download_data.sh
