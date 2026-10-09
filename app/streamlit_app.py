@@ -38,6 +38,11 @@ def load_summary() -> dict:
     return json.loads((DATA / "summary.json").read_text())
 
 
+@st.cache_data
+def load_drift() -> dict:
+    return json.loads((DATA / "drift.json").read_text())
+
+
 @st.cache_resource
 def load_scorer() -> Scorer:
     return Scorer(ROOT / "models")
@@ -89,7 +94,8 @@ st.caption(
     f"{summary['daily_alert_capacity']} alerts a day."
 )
 
-queue_tab, score_tab, model_tab = st.tabs(["Alert queue", "Score a payment", "How the model works"])
+queue_tab, score_tab, model_tab, monitor_tab = st.tabs(
+    ["Alert queue", "Score a payment", "How the model works", "Monitoring"])
 
 # ---------------------------------------------------------------- Alert queue
 with queue_tab:
@@ -254,3 +260,49 @@ with model_tab:
 
     st.caption("Data: PaySim synthetic mobile money dataset (E. A. Lopez-Rojas, Kaggle), "
                "licence CC BY-SA 4.0. No real customer data is used.")
+
+# ---------------------------------------------------------------- Monitoring
+with monitor_tab:
+    drift = load_drift()
+    th = drift["thresholds"]
+    st.write(
+        "Each feature and the model's risk score are compared with the training period "
+        "(days 0 to 19) using the Population Stability Index (PSI). Below "
+        f"{th['watch']} is stable, {th['watch']} to {th['drift']} is worth watching, and above "
+        f"{th['drift']} is drift. The reference profile is saved with the model, so this check "
+        "does not need the training data."
+    )
+    daily = pd.DataFrame(drift["daily"])
+    st.markdown("#### Day by day")
+    psi_line = alt.Chart(daily).mark_line(point=True, color=LOWERS).encode(
+        x=alt.X("day:Q", title="Day", scale=alt.Scale(zero=False)),
+        y=alt.Y("psi_risk_score:Q", title="PSI of the risk score"),
+        tooltip=["day", "payments", alt.Tooltip("psi_risk_score:Q", format=".3f")],
+    )
+    rules = alt.Chart(pd.DataFrame({"y": [th["watch"], th["drift"]]})).mark_rule(
+        strokeDash=[4, 4], color="#8a8986").encode(y="y:Q")
+    st.altair_chart(psi_line + rules, width="stretch", height=240)
+    st.altair_chart(
+        alt.Chart(daily).mark_line(point=True, color=LOWERS).encode(
+            x=alt.X("day:Q", title="Day", scale=alt.Scale(zero=False)),
+            y=alt.Y("alert_rate:Q", title="Share of payments alerted", axis=alt.Axis(format="%")),
+            tooltip=["day", "payments", alt.Tooltip("alert_rate:Q", format=".1%")],
+        ),
+        width="stretch", height=200,
+    )
+    st.caption("Genuine payment volume collapses on day 17. The risk score's PSI jumps past the "
+               "drift line and the alert rate rises from 1.2% to 6.6% that same day, before any "
+               "fraud outcomes would be known.")
+
+    st.markdown("#### By feature")
+    table = pd.DataFrame(drift["by_period"])
+    table["feature"] = table["feature"].map({**FEATURE_LABELS, "risk_score": "Risk score"})
+    st.dataframe(
+        table, hide_index=True, width="stretch",
+        column_config={
+            "feature": "Feature",
+            "psi_valid": st.column_config.NumberColumn("PSI, days 20 to 24", format="%.3f"),
+            "psi_test": st.column_config.NumberColumn("PSI, days 25 to 29", format="%.3f"),
+            "status_test": "Status (days 25 to 29)",
+        },
+    )

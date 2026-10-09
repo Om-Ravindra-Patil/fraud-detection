@@ -1,5 +1,7 @@
 # Payment fraud detection with explainable alerts
 
+[![CI](https://github.com/Om-Ravindra-Patil/fraud-detection/actions/workflows/ci.yml/badge.svg)](https://github.com/Om-Ravindra-Patil/fraud-detection/actions/workflows/ci.yml)
+
 A fraud detection system for mobile money payments, built the way a bank's economic crime team
 would need it: scores that are tested on future data, an alert threshold chosen from business
 costs and analyst capacity, a reason for every alert, and a check on who gets wrongly flagged.
@@ -52,7 +54,8 @@ payment before approving it would not have them.
 6. **Explanations and fairness.** SHAP reasons for every alert, and false alert rates compared
    across payment type, time of day and amount. See [docs/responsible_ai.md](docs/responsible_ai.md).
 7. **Analyst notes.** A local LLM turns each alert's SHAP reasons into a short note.
-8. **Dashboard.** A Streamlit app to review alerts and score new payments live.
+8. **Dashboard.** A Streamlit app to review alerts, score new payments live and watch drift.
+9. **MLOps.** MLflow tracking, Docker, GitHub Actions and PSI drift monitoring.
 
 ## Results
 
@@ -137,6 +140,31 @@ Example, for a borderline alert (score 0.067, actually genuine):
 > payment. The payment is also a transfer, which raises concerns. A practical check would be to
 > verify the sender's account balance before this payment to confirm it was not empty.
 
+## MLOps and monitoring
+
+- **Experiment tracking.** Every training run, threshold choice and test score is logged to MLflow
+  with its parameters, metrics and model file (`make mlflow`).
+- **Tests and CI.** 62 pytest tests run on every push through GitHub Actions. They cover feature
+  leakage, split ordering, the cost and threshold logic, the note guardrails, drift maths, and a
+  check that the dashboard's Python features match the SQL features exactly (training/serving
+  skew). A second job builds the Docker image, starts it and checks the dashboard responds.
+- **Docker.** The dashboard image holds only what it needs: the code, the exported LightGBM model,
+  the frozen threshold and a 250 KB data bundle. It has no training stack, and per-alert
+  explanations come from LightGBM's built-in TreeSHAP rather than the `shap` package.
+- **Drift monitoring.** A reference profile of the training data is saved with the model
+  (`models/reference_profile.json`), and later data is compared with it using the Population
+  Stability Index (PSI), the usual drift measure in bank model monitoring.
+
+![Daily drift in the risk score and alert rate](reports/figures/drift_daily.png)
+
+PaySim has a real shift built in: genuine payment volume collapses on day 17 while fraud carries
+on. The monitoring catches it on the first day, from the model's output alone. The risk score's
+PSI jumps from 0.024 to 0.378 and the alert rate goes from 1.2% to 6.6%, before any fraud
+outcomes would be known. The drifting inputs are the receiving-account history features (PSI
+around 3), while the payment itself (amount, type, balances) stays stable. History features also
+drift a little within the training period, because no account has any history on day 0, so a
+real deployment would need a warm-up period before its baseline is taken.
+
 ## Limitations
 
 - **Synthetic data.** PaySim is simulated, and some of what the model learns (the night-time
@@ -159,7 +187,9 @@ Example, for a borderline alert (score 0.067, actually genuine):
 | `models/` | Exported LightGBM model and the frozen alert threshold |
 | `docs/` | Threshold decision and responsible AI write-ups |
 | `reports/` | Result tables and charts |
-| `tests/` | 50 pytest tests, including leakage, training/serving skew and dashboard tests |
+| `tests/` | 62 pytest tests, including leakage, training/serving skew, drift and dashboard tests |
+| `Dockerfile` | Dashboard image, built and smoke-tested in CI |
+| `.github/workflows/` | GitHub Actions: lint, tests and Docker build on every push |
 
 ## Run it yourself
 
@@ -170,6 +200,13 @@ make setup
 make app        # http://localhost:8501
 ```
 
+Or with Docker:
+
+```bash
+docker build -t fraud-dashboard .
+docker run -p 8501:8501 fraud-dashboard
+```
+
 To rebuild everything from the raw data (needs a Kaggle login and, for the notes, Ollama):
 
 ```bash
@@ -177,8 +214,9 @@ To rebuild everything from the raw data (needs a Kaggle login and, for the notes
 make data features eda      # download PaySim, build features in DuckDB, run the SQL EDA
 make train evaluate         # train and compare models, choose the threshold, score the test period
 make explain fairness       # SHAP explanations and the false alert check
-make notes app-data         # LLM analyst notes and the dashboard bundle
-make test                   # 50 tests on small synthetic data
+make notes drift            # LLM analyst notes and the PSI drift report
+make app-data               # export the model and build the dashboard bundle
+make test                   # 62 tests on small synthetic data
 make mlflow                 # experiment tracking UI at http://127.0.0.1:5001
 ```
 
@@ -186,5 +224,4 @@ For the notes: `brew install ollama && brew services start ollama && ollama pull
 
 ## Still to come
 
-Docker packaging, a GitHub Actions workflow running the tests on every push, data drift
-monitoring, and deployment of the dashboard on AWS.
+Deployment of the dashboard on AWS.

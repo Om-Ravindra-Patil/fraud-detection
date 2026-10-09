@@ -2,12 +2,13 @@
 
 import lightgbm as lgb
 import numpy as np
-import pandas as pd
 from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer
 from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import Pipeline, make_pipeline
 from sklearn.preprocessing import FunctionTransformer, OneHotEncoder, StandardScaler
+
+from fraud.frames import to_lightgbm_frame  # noqa: F401  (re-exported for training code)
 
 # Skewed, non-negative columns that a linear model handles better on a log scale
 LOG_COLUMNS = {
@@ -41,11 +42,3 @@ def build_lightgbm(params: dict, seed: int, scale_pos_weight: float = 1.0) -> lg
     return lgb.LGBMClassifier(
         **params, scale_pos_weight=scale_pos_weight, random_state=seed, verbose=-1
     )
-
-
-def to_lightgbm_frame(df: pd.DataFrame, columns: list[str]) -> pd.DataFrame:
-    """Select model columns and give 'type' a fixed category set so codes match across splits."""
-    X = df[columns].copy()
-    if "type" in X:
-        X["type"] = pd.Categorical(X["type"], categories=["CASH_OUT", "TRANSFER"])
-    return X

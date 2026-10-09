@@ -14,7 +14,7 @@ import lightgbm as lgb
 import numpy as np
 import pandas as pd
 
-from fraud.models import to_lightgbm_frame
+from fraud.frames import to_lightgbm_frame
 from fraud.reasons import top_reasons
 
 MODEL_FILE = "fraud_model.txt"

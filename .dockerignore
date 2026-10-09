@@ -1,0 +1,17 @@
+# Keep the build context small: the image only needs src/, app/ and the exported model
+.git
+.venv
+.claude
+data
+mlruns
+mlartifacts
+mlflow.db
+notebooks
+reports
+docs
+tests
+models/*.joblib
+**/__pycache__
+**/.pytest_cache
+.ruff_cache
+.env

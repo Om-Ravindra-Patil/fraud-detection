@@ -1,0 +1,13 @@
+feature,psi_valid,psi_test,status_test
+hours_since_prev_dest_txn,3.0998,3.4603,drift
+dest_txn_count_24h,2.7365,3.0218,drift
+dest_amount_sum_24h,1.7713,1.9659,drift
+risk_score,0.2208,0.3103,drift
+hour_of_day,0.2013,0.1867,watch
+orig_balance_zero,0.0146,0.0566,stable
+empties_orig_account,0.0106,0.0415,stable
+dest_balance_zero,0.0049,0.0223,stable
+old_balance_dest,0.0059,0.0221,stable
+type,0.0075,0.0098,stable
+dest_prior_txn_count,0.0012,0.0063,stable
+log_amount,0.0018,0.0003,stable

@@ -17,6 +17,8 @@ def test_dashboard_renders_without_errors():
     assert not at.exception
     assert at.title[0].value == "Fraud alert review"
     assert len(at.metric) >= 5
+    assert [t.label for t in at.tabs] == ["Alert queue", "Score a payment",
+                                          "How the model works", "Monitoring"]
 
 
 def test_score_a_payment_form():

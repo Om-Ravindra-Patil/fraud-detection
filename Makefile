@@ -1,4 +1,4 @@
-.PHONY: setup data features eda train evaluate explain fairness notes app-data app mlflow test lint
+.PHONY: setup data features eda train evaluate explain fairness notes drift app-data app mlflow test lint
 
 setup:
 	python3 -m venv .venv && .venv/bin/pip install -U pip && .venv/bin/pip install -e ".[dev,app]"
@@ -26,6 +26,9 @@ fairness:
 
 notes:
 	.venv/bin/python -m fraud.notes
+
+drift:
+	.venv/bin/python -m fraud.drift
 
 app-data:
 	.venv/bin/python -m fraud.app_data

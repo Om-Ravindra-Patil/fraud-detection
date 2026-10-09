@@ -1,0 +1,232 @@
+{
+ "thresholds": {
+  "watch": 0.1,
+  "drift": 0.25
+ },
+ "by_period": [
+  {
+   "feature": "hours_since_prev_dest_txn",
+   "psi_valid": 3.0998,
+   "psi_test": 3.4603,
+   "status_test": "drift"
+  },
+  {
+   "feature": "dest_txn_count_24h",
+   "psi_valid": 2.7365,
+   "psi_test": 3.0218,
+   "status_test": "drift"
+  },
+  {
+   "feature": "dest_amount_sum_24h",
+   "psi_valid": 1.7713,
+   "psi_test": 1.9659,
+   "status_test": "drift"
+  },
+  {
+   "feature": "risk_score",
+   "psi_valid": 0.2208,
+   "psi_test": 0.3103,
+   "status_test": "drift"
+  },
+  {
+   "feature": "hour_of_day",
+   "psi_valid": 0.2013,
+   "psi_test": 0.1867,
+   "status_test": "watch"
+  },
+  {
+   "feature": "orig_balance_zero",
+   "psi_valid": 0.0146,
+   "psi_test": 0.0566,
+   "status_test": "stable"
+  },
+  {
+   "feature": "empties_orig_account",
+   "psi_valid": 0.0106,
+   "psi_test": 0.0415,
+   "status_test": "stable"
+  },
+  {
+   "feature": "dest_balance_zero",
+   "psi_valid": 0.0049,
+   "psi_test": 0.0223,
+   "status_test": "stable"
+  },
+  {
+   "feature": "old_balance_dest",
+   "psi_valid": 0.0059,
+   "psi_test": 0.0221,
+   "status_test": "stable"
+  },
+  {
+   "feature": "type",
+   "psi_valid": 0.0075,
+   "psi_test": 0.0098,
+   "status_test": "stable"
+  },
+  {
+   "feature": "dest_prior_txn_count",
+   "psi_valid": 0.0012,
+   "psi_test": 0.0063,
+   "status_test": "stable"
+  },
+  {
+   "feature": "log_amount",
+   "psi_valid": 0.0018,
+   "psi_test": 0.0003,
+   "status_test": "stable"
+  }
+ ],
+ "daily": [
+  {
+   "day": 14,
+   "payments": 173709,
+   "alert_rate": 0.012,
+   "psi_risk_score": 0.0201,
+   "psi_hours_since_prev_dest_txn": 0.2232,
+   "psi_dest_txn_count_24h": 0.4453,
+   "psi_dest_amount_sum_24h": 0.17
+  },
+  {
+   "day": 15,
+   "payments": 163208,
+   "alert_rate": 0.0119,
+   "psi_risk_score": 0.0223,
+   "psi_hours_since_prev_dest_txn": 0.2984,
+   "psi_dest_txn_count_24h": 0.5506,
+   "psi_dest_amount_sum_24h": 0.2315
+  },
+  {
+   "day": 16,
+   "payments": 186610,
+   "alert_rate": 0.0116,
+   "psi_risk_score": 0.0241,
+   "psi_hours_since_prev_dest_txn": 0.2994,
+   "psi_dest_txn_count_24h": 0.5886,
+   "psi_dest_amount_sum_24h": 0.2763
+  },
+  {
+   "day": 17,
+   "payments": 10136,
+   "alert_rate": 0.0658,
+   "psi_risk_score": 0.3776,
+   "psi_hours_since_prev_dest_txn": 1.1049,
+   "psi_dest_txn_count_24h": 0.9306,
+   "psi_dest_amount_sum_24h": 0.5247
+  },
+  {
+   "day": 18,
+   "payments": 4209,
+   "alert_rate": 0.0649,
+   "psi_risk_score": 0.1955,
+   "psi_hours_since_prev_dest_txn": 3.3537,
+   "psi_dest_txn_count_24h": 3.3756,
+   "psi_dest_amount_sum_24h": 2.2929
+  },
+  {
+   "day": 19,
+   "payments": 8154,
+   "alert_rate": 0.0374,
+   "psi_risk_score": 0.2074,
+   "psi_hours_since_prev_dest_txn": 4.1845,
+   "psi_dest_txn_count_24h": 3.5928,
+   "psi_dest_amount_sum_24h": 2.4446
+  },
+  {
+   "day": 20,
+   "payments": 10104,
+   "alert_rate": 0.0373,
+   "psi_risk_score": 0.1504,
+   "psi_hours_since_prev_dest_txn": 3.9617,
+   "psi_dest_txn_count_24h": 3.2291,
+   "psi_dest_amount_sum_24h": 2.1004
+  },
+  {
+   "day": 21,
+   "payments": 21355,
+   "alert_rate": 0.0245,
+   "psi_risk_score": 0.2597,
+   "psi_hours_since_prev_dest_txn": 3.5133,
+   "psi_dest_txn_count_24h": 2.8859,
+   "psi_dest_amount_sum_24h": 1.8895
+  },
+  {
+   "day": 22,
+   "payments": 20702,
+   "alert_rate": 0.027,
+   "psi_risk_score": 0.2191,
+   "psi_hours_since_prev_dest_txn": 2.962,
+   "psi_dest_txn_count_24h": 2.5555,
+   "psi_dest_amount_sum_24h": 1.6185
+  },
+  {
+   "day": 23,
+   "payments": 13882,
+   "alert_rate": 0.0297,
+   "psi_risk_score": 0.231,
+   "psi_hours_since_prev_dest_txn": 3.0147,
+   "psi_dest_txn_count_24h": 2.7386,
+   "psi_dest_amount_sum_24h": 1.7978
+  },
+  {
+   "day": 24,
+   "payments": 24549,
+   "alert_rate": 0.0234,
+   "psi_risk_score": 0.2461,
+   "psi_hours_since_prev_dest_txn": 2.8916,
+   "psi_dest_txn_count_24h": 2.6766,
+   "psi_dest_amount_sum_24h": 1.7436
+  },
+  {
+   "day": 25,
+   "payments": 5466,
+   "alert_rate": 0.0765,
+   "psi_risk_score": 0.3432,
+   "psi_hours_since_prev_dest_txn": 3.6337,
+   "psi_dest_txn_count_24h": 3.1291,
+   "psi_dest_amount_sum_24h": 1.8863
+  },
+  {
+   "day": 26,
+   "payments": 3718,
+   "alert_rate": 0.0672,
+   "psi_risk_score": 0.2978,
+   "psi_hours_since_prev_dest_txn": 4.3275,
+   "psi_dest_txn_count_24h": 3.7384,
+   "psi_dest_amount_sum_24h": 2.962
+  },
+  {
+   "day": 27,
+   "payments": 5680,
+   "alert_rate": 0.0928,
+   "psi_risk_score": 0.3458,
+   "psi_hours_since_prev_dest_txn": 4.3046,
+   "psi_dest_txn_count_24h": 3.5986,
+   "psi_dest_amount_sum_24h": 2.4735
+  },
+  {
+   "day": 28,
+   "payments": 23365,
+   "alert_rate": 0.0253,
+   "psi_risk_score": 0.2427,
+   "psi_hours_since_prev_dest_txn": 3.5589,
+   "psi_dest_txn_count_24h": 2.9035,
+   "psi_dest_amount_sum_24h": 1.8432
+  },
+  {
+   "day": 29,
+   "payments": 5057,
+   "alert_rate": 0.0668,
+   "psi_risk_score": 1.0954,
+   "psi_hours_since_prev_dest_txn": 3.7804,
+   "psi_dest_txn_count_24h": 2.8951,
+   "psi_dest_amount_sum_24h": 2.0653
+  }
+ ],
+ "watched": [
+  "risk_score",
+  "hours_since_prev_dest_txn",
+  "dest_txn_count_24h",
+  "dest_amount_sum_24h"
+ ]
+}

@@ -1,0 +1,70 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Lint and tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: pyproject.toml
+
+      - name: Install
+        run: pip install -e ".[dev,app]"
+
+      - name: Lint
+        run: ruff check src tests app
+
+      - name: Tests
+        # Tests use small synthetic data and the committed model bundle, so no Kaggle access
+        run: pytest -q
+
+  docker:
+    name: Build and smoke-test the dashboard image
+    needs: test
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Build image
+        run: docker build -t fraud-dashboard .
+
+      - name: Start container
+        run: docker run -d --name dashboard -p 8501:8501 fraud-dashboard
+
+      - name: Wait for the health check
+        run: |
+          for i in $(seq 1 30); do
+            if curl -fsS http://localhost:8501/_stcore/health; then echo; exit 0; fi
+            sleep 2
+          done
+          echo "Dashboard did not become healthy"; docker logs dashboard; exit 1
+
+      - name: Page responds
+        run: curl -fsS http://localhost:8501 | grep -q "<title>"
+
+      - name: Image size
+        run: docker image ls fraud-dashboard --format "{{.Size}}"
+
+      - name: Container logs
+        if: always()
+        run: docker logs dashboard || true
