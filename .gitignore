@@ -4,6 +4,7 @@ mlruns/
 mlartifacts/
 models/*.pkl
 models/*.txt
+!models/fraud_model.txt
 models/*.joblib
 reports/eda/*.csv
 

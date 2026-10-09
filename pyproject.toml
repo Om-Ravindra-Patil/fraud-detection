@@ -17,6 +17,7 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = ["pytest>=8", "ruff>=0.6", "kaggle>=1.6"]
+app = ["streamlit>=1.40"]
 
 [build-system]
 requires = ["setuptools>=68"]

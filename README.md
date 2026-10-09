@@ -4,7 +4,7 @@ End-to-end fraud detection project: SQL feature engineering in DuckDB, a time-ba
 model evaluation, a decision threshold chosen by business cost, SHAP explanations,
 LLM-written analyst notes, MLOps tooling and a Streamlit dashboard.
 
-Full write-up to follow. Current status: **Phase 5 (explanations, responsible AI, analyst notes).** See
+Full write-up to follow. Current status: **Phase 6 (dashboard).** See
 [docs/threshold_decision.md](docs/threshold_decision.md) and [docs/responsible_ai.md](docs/responsible_ai.md).
 
 ## Data
@@ -34,6 +34,8 @@ make evaluate   # choose the alert threshold on validation, then score the test 
 make explain    # SHAP: overall importance and the top reasons for each flagged payment
 make fairness   # false alert rates by payment type, time of day and amount
 make notes      # LLM analyst notes via a local Ollama model (falls back to a template)
+make app-data   # export the model and build the small data bundle the dashboard reads
+make app        # run the Streamlit dashboard at http://localhost:8501
 make mlflow     # open the MLflow UI at http://127.0.0.1:5001
 make test       # run the test suite (uses small synthetic data, no download needed)
 ```
@@ -50,4 +52,6 @@ The raw data is not committed to this repo.
 | `sql/` | All data loading, cleaning, feature and EDA logic, written in SQL |
 | `src/fraud/` | Python package that runs the SQL and (later) trains and explains the model |
 | `tests/` | pytest suite, including leakage tests for the feature SQL |
+| `app/` | Streamlit dashboard and its committed data bundle (`app/data/`) |
+| `models/` | Exported model (`fraud_model.txt`) and frozen alert threshold (`decision.json`) |
 | `configs/config.yaml` | Paths and settings |
