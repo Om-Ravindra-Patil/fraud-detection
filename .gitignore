@@ -1,5 +1,5 @@
 # Data and generated artefacts stay out of git
-data/
+/data/
 mlruns/
 mlartifacts/
 models/*.pkl

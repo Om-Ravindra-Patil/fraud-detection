@@ -1,0 +1,149 @@
+{
+  "threshold": 0.018385546491860427,
+  "review_cost_per_alert": 1000,
+  "daily_alert_capacity": 500,
+  "test_days": [
+    25,
+    29
+  ],
+  "n_test_days": 5,
+  "results": {
+    "lightgbm_realistic_none": {
+      "alerts_per_day": 425.0,
+      "precision": 0.488,
+      "recall": 0.7761976047904192,
+      "fraud_money_caught": 0.9555572717268525,
+      "pr_auc": 0.7249420640336067,
+      "total_cost": 101878981.69
+    },
+    "logreg_realistic_balanced": {
+      "alerts_per_day": 384.4,
+      "precision": 0.3766909469302809,
+      "recall": 0.5419161676646707,
+      "fraud_money_caught": 0.6575142678091553,
+      "pr_auc": 0.5094386349838148,
+      "total_cost": 770648781.31
+    },
+    "rule_isFlaggedFraud": {
+      "alerts_per_day": 1.0,
+      "precision": 1.0,
+      "recall": 0.0037425149700598,
+      "fraud_money_caught": 0.0087116907325404,
+      "pr_auc": null,
+      "total_cost": 2225002422.4
+    },
+    "no_alerts": {
+      "alerts_per_day": 0.0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "fraud_money_caught": 0.0,
+      "pr_auc": null,
+      "total_cost": 2244551258.8
+    }
+  },
+  "global_importance": {
+    "empties_orig_account": 0.8828,
+    "type": 0.3214,
+    "log_amount": 0.2871,
+    "dest_balance_zero": 0.1693,
+    "hour_of_day": 0.1663,
+    "hours_since_prev_dest_txn": 0.1628,
+    "old_balance_dest": 0.0993,
+    "dest_prior_txn_count": 0.0566,
+    "orig_balance_zero": 0.0381,
+    "dest_txn_count_24h": 0.0141,
+    "dest_amount_sum_24h": 0.005
+  },
+  "fairness": [
+    {
+      "segment_by": "amount quintile",
+      "segment": "Q1",
+      "payments": 8658,
+      "frauds": 215.0,
+      "alert_rate_pct": 3.78,
+      "false_positive_rate_pct": 2.12,
+      "recall_pct": 68.8
+    },
+    {
+      "segment_by": "amount quintile",
+      "segment": "Q2",
+      "payments": 8657,
+      "frauds": 136.0,
+      "alert_rate_pct": 2.99,
+      "false_positive_rate_pct": 1.97,
+      "recall_pct": 66.9
+    },
+    {
+      "segment_by": "amount quintile",
+      "segment": "Q3",
+      "payments": 8657,
+      "frauds": 86.0,
+      "alert_rate_pct": 3.04,
+      "false_positive_rate_pct": 2.38,
+      "recall_pct": 68.6
+    },
+    {
+      "segment_by": "amount quintile",
+      "segment": "Q4",
+      "payments": 8657,
+      "frauds": 162.0,
+      "alert_rate_pct": 3.87,
+      "false_positive_rate_pct": 2.63,
+      "recall_pct": 69.1
+    },
+    {
+      "segment_by": "amount quintile",
+      "segment": "Q5",
+      "payments": 8657,
+      "frauds": 737.0,
+      "alert_rate_pct": 10.87,
+      "false_positive_rate_pct": 3.96,
+      "recall_pct": 85.1
+    },
+    {
+      "segment_by": "payment type",
+      "segment": "CASH_OUT",
+      "payments": 33293,
+      "frauds": 668.0,
+      "alert_rate_pct": 2.75,
+      "false_positive_rate_pct": 1.52,
+      "recall_pct": 63.2
+    },
+    {
+      "segment_by": "payment type",
+      "segment": "TRANSFER",
+      "payments": 9993,
+      "frauds": 668.0,
+      "alert_rate_pct": 12.09,
+      "false_positive_rate_pct": 6.36,
+      "recall_pct": 92.1
+    },
+    {
+      "segment_by": "time of day",
+      "segment": "1 night (00-06)",
+      "payments": 851,
+      "frauds": 394.0,
+      "alert_rate_pct": 55.58,
+      "false_positive_rate_pct": 19.04,
+      "recall_pct": 98.0
+    },
+    {
+      "segment_by": "time of day",
+      "segment": "2 day (07-20)",
+      "payments": 39370,
+      "frauds": 756.0,
+      "alert_rate_pct": 3.59,
+      "false_positive_rate_pct": 2.35,
+      "recall_pct": 66.5
+    },
+    {
+      "segment_by": "time of day",
+      "segment": "3 evening (21-23)",
+      "payments": 3065,
+      "frauds": 186.0,
+      "alert_rate_pct": 7.83,
+      "false_positive_rate_pct": 3.2,
+      "recall_pct": 79.6
+    }
+  ]
+}
